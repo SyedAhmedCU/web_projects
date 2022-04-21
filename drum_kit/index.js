@@ -1,19 +1,28 @@
 let drumKeys = ["w", "a", "s", "d", "j", "k", "l"]; //list of the drum keys
 
-document.addEventListener("keydown", function(e){
-    var keyPressed = e.key; // listen which key is pressed
+// document.addEventListener("keydown", function(e){}) //...Replaced with jQuerry
+$(document).keydown(function(event){ // using jQuery to listen for keyboad events
+    //console.log(event.key);
+    var keyPressed = event.key; // listen which key is pressed
     var drumKeyPressed = drumKeys.includes(keyPressed); // check if the key pressed is included in the drum keys
     if (drumKeyPressed){
         makeSound(keyPressed); //actitive makeSound(key) function to play specific audio.mp3 to pressed key
         buttonPressed(keyPressed) //actitive buttonPressed(currentDrum) function to play specific audio.mp3 to pressed key
-    }    
-})
+    }  
+});
 
-document.querySelectorAll(".drum").forEach(item => {item.addEventListener("click", function(){ //listen where click event happen
-    var buttonInnerHTML= this.innerHTML; //find the text inside html element "button"  when clicked on the drum button
+$(".drum").click(function(){ // using jQuery for mouse click event on .drum class (class for buttons)
+    var buttonInnerHTML= $(this).html(); //find the text inside html element "button"  when clicked on the drum button
     makeSound(buttonInnerHTML); //actitive makeSound(key) function to play specific audio.mp3 to clicked button
     buttonPressed(buttonInnerHTML); //actitive buttonPressed(current) function to play specific audio.mp3 to clicked button
-})});
+});
+
+// ...Replaced with jQuerry
+// document.querySelectorAll(".drum").forEach(item => {item.addEventListener("click", function(){ 
+//     var buttonInnerHTML= this.innerHTML; 
+//     makeSound(buttonInnerHTML); 
+//     buttonPressed(buttonInnerHTML); 
+// })});
 
 function makeSound(key){
     // switch to specific audio file to corresponding drum buttons or keys
@@ -52,17 +61,22 @@ function makeSound(key){
 }
 
 function buttonPressed(current){
-    var currentDrum = document.querySelector("."+current); // find the current button class inside HTML
-    // add a class "pressed" to its html classlist so that the .pressed class (shadow effect) inside CSS is activated
-    currentDrum.classList.add("pressed"); 
+    $("."+current).addClass("pressed"); // add .pressed css class (shadow effect) to current button class inside HTML
     setTimeout (function(){
         // remove the .pressed (shadow effect) after 100 milisec of the button clicked or pressed
-        currentDrum.classList.remove("pressed")}, 100); 
+        $("."+current).removeClass("pressed")}, 100); 
 }
+// ...Replaced with jQuery
+// function buttonPressed(current){
+//     var currentDrum = document.querySelector("."+current);
+//     currentDrum.classList.add("pressed"); 
+//     setTimeout (function(){
+//         currentDrum.classList.remove("pressed")}, 100); 
+// }
 
 
 
-//-----Other way to write the code
+//-----Alternative Code
 
 // var numOfDrumButtons = document.querySelectorAll(".drum").length;
 
