@@ -1,12 +1,34 @@
 let buttonColor = ["green", "red", "yellow", "blue"];
+let gamePattern = [];
+let clickPattern = [];
+
+$(document).keydown(function(event){
+    if (gamePattern.length === 0){
+        setTimeout(function(){
+            randomSequence ()}, 800);
+    }
+    
+});
 
 $(".btn").click(function(){
     var buttonClicked = this.id;
-    //console.log(buttonClicked);
+    clickPattern.push(buttonClicked);
+    //console.log("clickPattern "+clickPattern);
     makeSound(buttonClicked);
     buttonPressed(buttonClicked);
-    setTimeout(function(){
-        randomSequence (buttonClicked)}, 800);
+    if (clickPattern.length === gamePattern.length){
+        // Check user click input with gamePattern
+        if (clickPattern.toString() != gamePattern.toString()){ 
+            gameOver();
+        }
+        else {
+            setTimeout(function(){
+                randomSequence ()}, 800);
+        }
+    }
+    else if(clickPattern.length > gamePattern.length){
+        gameOver();
+    }
 })
 
 function makeSound(key){
@@ -36,11 +58,22 @@ function makeSound(key){
     }
 }
 
-function randomSequence (){
+function randomSequence(){
+    var level = 0
     var randomNumber = Math.floor(Math.random()*4);
     var ramdomButton = buttonColor[randomNumber];
-    buttonPressed(ramdomButton);
-    makeSound(ramdomButton);
+    gamePattern.push(ramdomButton);
+    //console.log("gamePattern "+gamePattern);
+    for (let i = 0; i < gamePattern.length; i++) {
+        level = i+1;
+        setTimeout(function(){
+            const seq = gamePattern[i];
+            buttonPressed(seq);
+            makeSound(seq);}, i*800);
+    }
+    //console.log(level);
+    $("h1").html("Level "+ level +" <br> <br> Match The Sequence!");
+    clickPattern = [];
 }
 
 function buttonPressed(current){
@@ -48,6 +81,17 @@ function buttonPressed(current){
     $("."+current).addClass("pressed"); 
 
     setTimeout (function(){
-        // remove the .pressed (shadow effect) after 100 milisec of the button clicked or pressed
+        // remove the .pressed (shadow effect) after 300 milisec of the button clicked or pressed
         $("."+current).removeClass("pressed")}, 300); 
+}
+
+function gameOver(){
+    makeSound("wrong");
+    $(".btn").addClass("pressed");
+    setTimeout (function(){
+        // remove the .pressed (shadow effect) after 300 milisec of the button clicked or pressed
+        $(".btn").removeClass("pressed")}, 300);  
+    $("h1").html("Game Over! <br> <br> Press Any Key To Try Again");
+    gamePattern = [];
+    clickPattern = [];
 }
