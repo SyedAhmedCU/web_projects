@@ -3,11 +3,12 @@ let gamePattern = [];
 let clickPattern = [];
 
 $(document).keydown(function(event){
-    if (gamePattern.length === 0){
+    var key = event.code;
+    console.log(key);
+    if (key === "Space" && gamePattern.length === 0){
         setTimeout(function(){
             randomSequence ()}, 800);
     }
-    
 });
 
 $(".btn").click(function(){
@@ -72,7 +73,7 @@ function randomSequence(){
             makeSound(seq);}, i*800);
     }
     //console.log(level);
-    $("h1").html("Level "+ level +" <br> <br> Match The Sequence!");
+    $("h1").html("Level "+ level +" <br> <br>  Watch Carefully & Match The Sequence!");
     clickPattern = [];
 }
 
@@ -87,11 +88,11 @@ function buttonPressed(current){
 
 function gameOver(){
     makeSound("wrong");
-    $(".btn").addClass("pressed");
+    $("body").addClass("game-over");
     setTimeout (function(){
         // remove the .pressed (shadow effect) after 300 milisec of the button clicked or pressed
-        $(".btn").removeClass("pressed")}, 300);  
-    $("h1").html("Game Over! <br> <br> Press Any Key To Try Again");
+        $("body").removeClass("game-over")}, 300);  
+    $("h1").html("Game Over! <br> <br> Press Space bar To Try Again");
     gamePattern = [];
     clickPattern = [];
 }
